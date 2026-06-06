@@ -23,9 +23,9 @@ function load(): Student[] {
     if (!raw) return [];
     const list = JSON.parse(raw) as Student[];
     return list.map((s) => ({
-      memorizedSurahs: [],
-      expectedSurahs: [],
       ...s,
+      memorizedSurahs: s.memorizedSurahs ?? [],
+      expectedSurahs: s.expectedSurahs ?? [],
     }));
   } catch {
     return [];
