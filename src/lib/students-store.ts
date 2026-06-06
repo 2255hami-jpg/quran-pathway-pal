@@ -60,9 +60,9 @@ export function useStudents() {
     (data: Omit<Student, "id" | "createdAt" | "lastReviewAt"> & { lastReviewAt?: string }) => {
       const now = new Date().toISOString();
       const s: Student = {
-        memorizedSurahs: [],
-        expectedSurahs: [],
         ...data,
+        memorizedSurahs: data.memorizedSurahs ?? [],
+        expectedSurahs: data.expectedSurahs ?? [],
         id: crypto.randomUUID(),
         createdAt: now,
         lastReviewAt: data.lastReviewAt || now,
