@@ -50,6 +50,8 @@ type FormState = {
   pages: string;
   hizb: string;
   notes: string;
+  entryDate: string;
+  presentationDate: string;
   memorizedSurahs: string;
   expectedSurahs: string;
 };
@@ -60,6 +62,8 @@ const emptyForm: FormState = {
   pages: "0",
   hizb: "1",
   notes: "",
+  entryDate: "",
+  presentationDate: "",
   memorizedSurahs: "",
   expectedSurahs: "",
 };
@@ -100,6 +104,8 @@ function Index() {
       pages: String(s.pages),
       hizb: String(s.hizb),
       notes: s.notes,
+      entryDate: s.entryDate || "",
+      presentationDate: s.presentationDate || "",
       memorizedSurahs: s.memorizedSurahs.join("، "),
       expectedSurahs: s.expectedSurahs.join("، "),
     });
@@ -125,6 +131,8 @@ function Index() {
       totalPages: 604,
       hizb: Math.max(0, Math.min(60, parseInt(form.hizb || "0", 10) || 0)),
       notes: form.notes.trim(),
+      entryDate: form.entryDate || undefined,
+      presentationDate: form.presentationDate || undefined,
       memorizedSurahs: parseList(form.memorizedSurahs),
       expectedSurahs: parseList(form.expectedSurahs),
     };
@@ -279,6 +287,22 @@ function Index() {
                   max="60"
                   value={form.hizb}
                   onChange={(e) => setForm({ ...form, hizb: e.target.value })}
+                />
+              </Field>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="تاريخ الدخول">
+                <Input
+                  type="date"
+                  value={form.entryDate}
+                  onChange={(e) => setForm({ ...form, entryDate: e.target.value })}
+                />
+              </Field>
+              <Field label="تاريخ العرض">
+                <Input
+                  type="date"
+                  value={form.presentationDate}
+                  onChange={(e) => setForm({ ...form, presentationDate: e.target.value })}
                 />
               </Field>
             </div>

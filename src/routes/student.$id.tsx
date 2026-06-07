@@ -53,7 +53,8 @@ function StudentDetails() {
       <div class="card">
         <div><span class="label">الاسم:</span> ${student.fullName}</div>
         <div><span class="label">الهاتف:</span> ${student.phone || "—"}</div>
-        <div><span class="label">تاريخ الدخول:</span> ${formatDate(student.createdAt)}</div>
+        <div><span class="label">تاريخ الدخول:</span> ${formatDate(student.entryDate || student.createdAt)}</div>
+        ${student.presentationDate ? `<div><span class="label">تاريخ العرض:</span> ${formatDate(student.presentationDate)}</div>` : ""}
         <div><span class="label">آخر مراجعة:</span> ${formatDate(student.lastReviewAt)}</div>
       </div>
       <div class="card">
@@ -103,8 +104,18 @@ function StudentDetails() {
       <div className="px-4 pt-5">
         <h2 className="text-2xl font-extrabold">👤 {student.fullName}</h2>
         <div className="mt-1 text-sm text-muted-foreground">
-          📅 تاريخ الدخول: {formatDate(student.createdAt)}
+          📅 تاريخ التسجيل: {formatDate(student.createdAt)}
         </div>
+        {student.entryDate && (
+          <div className="mt-1 text-sm text-muted-foreground">
+            🚪 تاريخ الدخول: {formatDate(student.entryDate)}
+          </div>
+        )}
+        {student.presentationDate && (
+          <div className="mt-1 text-sm text-muted-foreground">
+            🎤 تاريخ العرض: {formatDate(student.presentationDate)}
+          </div>
+        )}
         {student.phone && (
           <div className="mt-1 text-sm text-muted-foreground">
             📞 الهاتف:{" "}
