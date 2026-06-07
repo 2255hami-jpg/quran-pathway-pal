@@ -53,7 +53,8 @@ function StudentDetails() {
       <div class="card">
         <div><span class="label">الاسم:</span> ${student.fullName}</div>
         <div><span class="label">الهاتف:</span> ${student.phone || "—"}</div>
-        <div><span class="label">تاريخ الدخول:</span> ${formatDate(student.createdAt)}</div>
+        <div><span class="label">تاريخ الدخول:</span> ${formatDate(student.entryDate || student.createdAt)}</div>
+        ${student.presentationDate ? `<div><span class="label">تاريخ العرض:</span> ${formatDate(student.presentationDate)}</div>` : ""}
         <div><span class="label">آخر مراجعة:</span> ${formatDate(student.lastReviewAt)}</div>
       </div>
       <div class="card">
