@@ -103,8 +103,18 @@ function StudentDetails() {
       <div className="px-4 pt-5">
         <h2 className="text-2xl font-extrabold">👤 {student.fullName}</h2>
         <div className="mt-1 text-sm text-muted-foreground">
-          📅 تاريخ الدخول: {formatDate(student.createdAt)}
+          📅 تاريخ التسجيل: {formatDate(student.createdAt)}
         </div>
+        {student.entryDate && (
+          <div className="mt-1 text-sm text-muted-foreground">
+            🚪 تاريخ الدخول: {formatDate(student.entryDate)}
+          </div>
+        )}
+        {student.presentationDate && (
+          <div className="mt-1 text-sm text-muted-foreground">
+            🎤 تاريخ العرض: {formatDate(student.presentationDate)}
+          </div>
+        )}
         {student.phone && (
           <div className="mt-1 text-sm text-muted-foreground">
             📞 الهاتف:{" "}
