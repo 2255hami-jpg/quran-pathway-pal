@@ -131,6 +131,8 @@ function Index() {
       totalPages: 604,
       hizb: Math.max(0, Math.min(60, parseInt(form.hizb || "0", 10) || 0)),
       notes: form.notes.trim(),
+      entryDate: form.entryDate || undefined,
+      presentationDate: form.presentationDate || undefined,
       memorizedSurahs: parseList(form.memorizedSurahs),
       expectedSurahs: parseList(form.expectedSurahs),
     };
