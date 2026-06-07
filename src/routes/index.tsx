@@ -60,6 +60,8 @@ const emptyForm: FormState = {
   pages: "0",
   hizb: "1",
   notes: "",
+  entryDate: "",
+  presentationDate: "",
   memorizedSurahs: "",
   expectedSurahs: "",
 };
