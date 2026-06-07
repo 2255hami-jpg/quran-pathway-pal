@@ -290,6 +290,22 @@ function Index() {
                 />
               </Field>
             </div>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="تاريخ الدخول">
+                <Input
+                  type="date"
+                  value={form.entryDate}
+                  onChange={(e) => setForm({ ...form, entryDate: e.target.value })}
+                />
+              </Field>
+              <Field label="تاريخ العرض">
+                <Input
+                  type="date"
+                  value={form.presentationDate}
+                  onChange={(e) => setForm({ ...form, presentationDate: e.target.value })}
+                />
+              </Field>
+            </div>
             <Field label="السور المحفوظة (افصل بفاصلة)">
               <Textarea
                 rows={2}
