@@ -83,6 +83,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "إدارة طلاب القرآن" },
       { property: "og:description", content: "تطبيق لإدارة طلاب حلقات تحفيظ القرآن الكريم" },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "إدارة طلاب القرآن" },
+      { name: "twitter:description", content: "تطبيق لإدارة طلاب حلقات تحفيظ القرآن الكريم" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8c0e6af3-4f0e-4108-bfe7-59755c47a5db/id-preview-bbb9f9aa--ce2ee771-3335-4be2-b100-002ae2e1c822.lovable.app-1780790796112.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8c0e6af3-4f0e-4108-bfe7-59755c47a5db/id-preview-bbb9f9aa--ce2ee771-3335-4be2-b100-002ae2e1c822.lovable.app-1780790796112.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
