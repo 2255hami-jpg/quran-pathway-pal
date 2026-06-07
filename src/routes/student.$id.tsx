@@ -105,6 +105,18 @@ function StudentDetails() {
         <div className="mt-1 text-sm text-muted-foreground">
           📅 تاريخ الدخول: {formatDate(student.createdAt)}
         </div>
+        {student.phone && (
+          <div className="mt-1 text-sm text-muted-foreground">
+            📞 الهاتف:{" "}
+            <a
+              href={`tel:${student.phone}`}
+              className="text-primary font-semibold tracking-wide"
+              dir="ltr"
+            >
+              {student.phone}
+            </a>
+          </div>
+        )}
       </div>
 
       {/* Progress card */}
