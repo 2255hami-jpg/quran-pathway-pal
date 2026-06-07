@@ -10,6 +10,8 @@ export type Student = {
   notes: string;
   createdAt: string;
   lastReviewAt: string;
+  entryDate?: string;
+  presentationDate?: string;
   memorizedSurahs: string[];
   expectedSurahs: string[];
 };
