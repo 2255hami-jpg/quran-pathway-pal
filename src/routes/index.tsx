@@ -104,6 +104,8 @@ function Index() {
       pages: String(s.pages),
       hizb: String(s.hizb),
       notes: s.notes,
+      entryDate: s.entryDate || "",
+      presentationDate: s.presentationDate || "",
       memorizedSurahs: s.memorizedSurahs.join("، "),
       expectedSurahs: s.expectedSurahs.join("، "),
     });
