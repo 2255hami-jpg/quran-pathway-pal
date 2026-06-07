@@ -50,6 +50,8 @@ type FormState = {
   pages: string;
   hizb: string;
   notes: string;
+  entryDate: string;
+  presentationDate: string;
   memorizedSurahs: string;
   expectedSurahs: string;
 };
