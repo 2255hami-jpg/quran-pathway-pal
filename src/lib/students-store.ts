@@ -61,14 +61,16 @@ export function useStudents() {
   const add = useCallback(
     (data: Omit<Student, "id" | "createdAt" | "lastReviewAt"> & { lastReviewAt?: string }) => {
       const now = new Date().toISOString();
-      const s: Student = {
-        ...data,
-        memorizedSurahs: data.memorizedSurahs ?? [],
-        expectedSurahs: data.expectedSurahs ?? [],
-        id: crypto.randomUUID(),
-        createdAt: now,
-        lastReviewAt: data.lastReviewAt || now,
-      };
+    const s: Student = {
+      ...data,
+      memorizedSurahs: data.memorizedSurahs ?? [],
+      expectedSurahs: data.expectedSurahs ?? [],
+      entryDate: data.entryDate || now,
+      presentationDate: data.presentationDate || "",
+      id: crypto.randomUUID(),
+      createdAt: now,
+      lastReviewAt: data.lastReviewAt || now,
+    };
       persist([s, ...load()]);
       return s;
     },
