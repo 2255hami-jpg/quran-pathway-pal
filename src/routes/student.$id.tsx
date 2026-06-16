@@ -3,6 +3,7 @@ import { useStudent, progressOf, formatDate } from "@/lib/students-store";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, FileText, Pin } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/student/$id")({
   head: ({ params }) => ({
@@ -78,6 +79,35 @@ function StudentDetails() {
     setTimeout(() => w.print(), 400);
   }
 
+  function sendEmail() {
+    if (!student?.email) return;
+    const subject = `تقرير الطالب: ${student.fullName}`;
+    const lines = [
+      `السلام عليكم ورحمة الله وبركاته`,
+      ``,
+      `تقرير متابعة حفظ القرآن للطالب: ${student.fullName}`,
+      `📞 الهاتف: ${student.phone || "—"}`,
+      `📅 تاريخ الدخول: ${formatDate(student.entryDate || student.createdAt)}`,
+      student.presentationDate ? `🎤 تاريخ العرض: ${formatDate(student.presentationDate)}` : "",
+      `📖 الصفحات: ${student.pages} / 604`,
+      `📕 الأحزاب: ${student.hizb}`,
+      `📊 نسبة الحفظ: ${pct}%`,
+      ``,
+      `✅ السور المحفوظة:`,
+      ...(student.memorizedSurahs.length ? student.memorizedSurahs.map((s) => `- ${s}`) : ["—"]),
+      ``,
+      `📌 السور المتوقعة:`,
+      ...(student.expectedSurahs.length ? student.expectedSurahs.map((s) => `- ${s}`) : ["—"]),
+      student.notes ? `\nملاحظات: ${student.notes}` : "",
+      ``,
+      `ملاحظة: يُرجى إرفاق ملف التقرير PDF يدوياً بعد تصديره من التطبيق.`,
+    ].filter(Boolean);
+    const body = lines.join("\n");
+    const href = `mailto:${encodeURIComponent(student.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = href;
+    toast.success("تم فتح تطبيق البريد");
+  }
+
   const size = 220;
   const stroke = 14;
   const r = (size - stroke) / 2;
@@ -126,6 +156,18 @@ function StudentDetails() {
             >
               {student.phone}
             </a>
+          </div>
+        )}
+        {student.email && (
+          <div className="mt-1 text-sm text-muted-foreground">
+            ✉️ البريد:{" "}
+            <button
+              onClick={sendEmail}
+              className="text-primary font-semibold tracking-wide underline-offset-2 hover:underline"
+              dir="ltr"
+            >
+              {student.email}
+            </button>
           </div>
         )}
       </div>

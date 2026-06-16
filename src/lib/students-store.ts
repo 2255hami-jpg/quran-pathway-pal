@@ -4,6 +4,7 @@ export type Student = {
   id: string;
   fullName: string;
   phone: string;
+  email?: string;
   pages: number;
   totalPages: number;
   hizb: number;
