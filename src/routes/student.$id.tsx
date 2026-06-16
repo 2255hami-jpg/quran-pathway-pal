@@ -129,6 +129,18 @@ function StudentDetails() {
             </a>
           </div>
         )}
+        {student.email && (
+          <div className="mt-1 text-sm text-muted-foreground">
+            ✉️ البريد:{" "}
+            <button
+              onClick={sendEmail}
+              className="text-primary font-semibold tracking-wide underline-offset-2 hover:underline"
+              dir="ltr"
+            >
+              {student.email}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Progress card */}
