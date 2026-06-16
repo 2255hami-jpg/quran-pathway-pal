@@ -47,6 +47,7 @@ export const Route = createFileRoute("/")({
 type FormState = {
   fullName: string;
   phone: string;
+  email: string;
   pages: string;
   hizb: string;
   notes: string;
@@ -59,6 +60,7 @@ type FormState = {
 const emptyForm: FormState = {
   fullName: "",
   phone: "",
+  email: "",
   pages: "0",
   hizb: "1",
   notes: "",
@@ -101,6 +103,7 @@ function Index() {
     setForm({
       fullName: s.fullName,
       phone: s.phone,
+      email: s.email || "",
       pages: String(s.pages),
       hizb: String(s.hizb),
       notes: s.notes,
@@ -267,6 +270,15 @@ function Index() {
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 placeholder="05xxxxxxxx"
+                dir="ltr"
+              />
+            </Field>
+            <Field label="البريد الإلكتروني">
+              <Input
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                placeholder="example@mail.com"
                 dir="ltr"
               />
             </Field>
