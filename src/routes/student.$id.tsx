@@ -2,7 +2,8 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useStudent, progressOf, formatDate } from "@/lib/students-store";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, FileText, Pin } from "lucide-react";
+import { ArrowLeft, FileText, Pin, Mail } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/student/$id")({
   head: ({ params }) => ({
