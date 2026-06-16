@@ -130,6 +130,7 @@ function Index() {
     const data = {
       fullName: form.fullName.trim(),
       phone: form.phone.trim(),
+      email: form.email.trim(),
       pages: Math.max(0, parseInt(form.pages || "0", 10) || 0),
       totalPages: 604,
       hizb: Math.max(0, Math.min(60, parseInt(form.hizb || "0", 10) || 0)),
