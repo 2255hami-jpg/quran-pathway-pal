@@ -36,6 +36,10 @@ function load(): Student[] {
       ...s,
       memorizedSurahs: s.memorizedSurahs ?? [],
       expectedSurahs: s.expectedSurahs ?? [],
+      memorizedMutun: s.memorizedMutun ?? [],
+      memorizedHadith: s.memorizedHadith ?? [],
+      tajweedRules: s.tajweedRules ?? [],
+      attendance: s.attendance ?? [],
     }));
   } catch {
     return [];
