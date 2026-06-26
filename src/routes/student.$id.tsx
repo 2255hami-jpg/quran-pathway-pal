@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
-import { useStudent, progressOf, formatDate, type AttendanceStatus } from "@/lib/students-store";
+import { useStudent, progressOf, formatDate } from "@/lib/students-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
