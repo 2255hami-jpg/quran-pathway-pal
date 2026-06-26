@@ -251,6 +251,125 @@ function StudentDetails() {
         )}
       </Section>
 
+      <Section title="📜 المتون المحفوظة" tone="green">
+        <ListOrDash items={student.memorizedMutun} />
+      </Section>
+
+      <Section title="📚 الأحاديث المحفوظة" tone="green">
+        <ListOrDash items={student.memorizedHadith} />
+      </Section>
+
+      <Section title="🎙️ أحكام التلاوة" tone="amber">
+        <ListOrDash items={student.tajweedRules} />
+      </Section>
+
+      {/* Attendance */}
+      <section
+        className="mx-4 mt-4 rounded-2xl p-4"
+        style={{ background: "var(--brand-stats)", boxShadow: "var(--shadow-card)" }}
+      >
+        <h4 className="mb-3 text-base font-bold text-foreground">🗓️ الحضور والغياب</h4>
+
+        {(() => {
+          const att = student.attendance || [];
+          const present = att.filter((a) => a.status === "present").length;
+          const absent = att.filter((a) => a.status === "absent").length;
+          const excused = att.filter((a) => a.status === "excused").length;
+          return (
+            <div className="mb-3 grid grid-cols-3 gap-2 text-center text-xs">
+              <div className="rounded-xl bg-card p-2">
+                <div className="text-lg font-extrabold text-primary">{present}</div>
+                <div className="text-muted-foreground">حضور</div>
+              </div>
+              <div className="rounded-xl bg-card p-2">
+                <div className="text-lg font-extrabold text-destructive">{absent}</div>
+                <div className="text-muted-foreground">غياب</div>
+              </div>
+              <div className="rounded-xl bg-card p-2">
+                <div className="text-lg font-extrabold" style={{ color: "var(--brand-fab)" }}>{excused}</div>
+                <div className="text-muted-foreground">بعذر</div>
+              </div>
+            </div>
+          );
+        })()}
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Input
+            type="date"
+            value={attDate}
+            onChange={(e) => setAttDate(e.target.value)}
+            className="h-10 w-auto flex-1"
+            dir="ltr"
+          />
+          <Button
+            size="sm"
+            onClick={() => {
+              setAttendance(attDate, "present");
+              toast.success("تم تسجيل الحضور");
+            }}
+            className="gap-1 bg-primary"
+          >
+            <Check className="h-4 w-4" /> حضور
+          </Button>
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => {
+              setAttendance(attDate, "absent");
+              toast.success("تم تسجيل الغياب");
+            }}
+            className="gap-1"
+          >
+            <X className="h-4 w-4" /> غياب
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              setAttendance(attDate, "excused");
+              toast.success("تم تسجيل غياب بعذر");
+            }}
+            className="gap-1"
+          >
+            <Clock className="h-4 w-4" /> بعذر
+          </Button>
+        </div>
+
+        {(student.attendance || []).length > 0 && (
+          <ul className="mt-3 max-h-60 space-y-1.5 overflow-auto">
+            {student.attendance.map((a) => (
+              <li
+                key={a.date}
+                className="flex items-center justify-between rounded-lg bg-card px-3 py-2 text-sm"
+              >
+                <span dir="ltr" className="font-mono text-xs text-muted-foreground">{a.date}</span>
+                <span
+                  className={
+                    a.status === "present"
+                      ? "text-primary font-semibold"
+                      : a.status === "absent"
+                      ? "text-destructive font-semibold"
+                      : "font-semibold"
+                  }
+                  style={a.status === "excused" ? { color: "var(--brand-fab)" } : undefined}
+                >
+                  {a.status === "present" ? "حضور" : a.status === "absent" ? "غياب" : "بعذر"}
+                </span>
+                <button
+                  onClick={() => removeAttendance(a.date)}
+                  aria-label="حذف"
+                  className="text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+
+
       <div className="px-4 pt-5">
         <Button
           onClick={exportPDF}
