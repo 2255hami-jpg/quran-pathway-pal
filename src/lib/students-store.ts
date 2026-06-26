@@ -1,5 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 
+export type AttendanceStatus = "present" | "absent" | "excused";
+export type AttendanceEntry = { date: string; status: AttendanceStatus; note?: string };
+
 export type Student = {
   id: string;
   fullName: string;
@@ -15,6 +18,10 @@ export type Student = {
   presentationDate?: string;
   memorizedSurahs: string[];
   expectedSurahs: string[];
+  memorizedMutun: string[];
+  memorizedHadith: string[];
+  tajweedRules: string[];
+  attendance: AttendanceEntry[];
 };
 
 const KEY = "quran_students_v1";
@@ -29,6 +36,10 @@ function load(): Student[] {
       ...s,
       memorizedSurahs: s.memorizedSurahs ?? [],
       expectedSurahs: s.expectedSurahs ?? [],
+      memorizedMutun: s.memorizedMutun ?? [],
+      memorizedHadith: s.memorizedHadith ?? [],
+      tajweedRules: s.tajweedRules ?? [],
+      attendance: s.attendance ?? [],
     }));
   } catch {
     return [];
@@ -66,6 +77,10 @@ export function useStudents() {
       ...data,
       memorizedSurahs: data.memorizedSurahs ?? [],
       expectedSurahs: data.expectedSurahs ?? [],
+      memorizedMutun: data.memorizedMutun ?? [],
+      memorizedHadith: data.memorizedHadith ?? [],
+      tajweedRules: data.tajweedRules ?? [],
+      attendance: data.attendance ?? [],
       entryDate: data.entryDate || now,
       presentationDate: data.presentationDate || "",
       id: crypto.randomUUID(),
@@ -106,15 +121,46 @@ export function useStudents() {
 export function useStudent(id: string) {
   const [student, setStudent] = useState<Student | null>(null);
   const [ready, setReady] = useState(false);
+  const refresh = useCallback(() => {
+    setStudent(load().find((s) => s.id === id) || null);
+  }, [id]);
   useEffect(() => {
-    const found = load().find((s) => s.id === id) || null;
-    setStudent(found);
+    refresh();
     setReady(true);
-    const onStorage = () => setStudent(load().find((s) => s.id === id) || null);
+    const onStorage = () => refresh();
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
-  }, [id]);
-  return { student, ready, refresh: () => setStudent(load().find((s) => s.id === id) || null) };
+  }, [id, refresh]);
+
+  const setAttendance = useCallback(
+    (date: string, status: AttendanceStatus) => {
+      const list = load();
+      const next = list.map((s) => {
+        if (s.id !== id) return s;
+        const att = (s.attendance || []).filter((a) => a.date !== date);
+        att.push({ date, status });
+        att.sort((a, b) => (a.date < b.date ? 1 : -1));
+        return { ...s, attendance: att };
+      });
+      save(next);
+      refresh();
+    },
+    [id, refresh]
+  );
+
+  const removeAttendance = useCallback(
+    (date: string) => {
+      const list = load();
+      const next = list.map((s) =>
+        s.id === id ? { ...s, attendance: (s.attendance || []).filter((a) => a.date !== date) } : s
+      );
+      save(next);
+      refresh();
+    },
+    [id, refresh]
+  );
+
+  return { student, ready, refresh, setAttendance, removeAttendance };
 }
 
 export function formatDate(iso: string) {

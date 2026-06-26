@@ -55,6 +55,9 @@ type FormState = {
   presentationDate: string;
   memorizedSurahs: string;
   expectedSurahs: string;
+  memorizedMutun: string;
+  memorizedHadith: string;
+  tajweedRules: string;
 };
 
 const emptyForm: FormState = {
@@ -68,6 +71,9 @@ const emptyForm: FormState = {
   presentationDate: "",
   memorizedSurahs: "",
   expectedSurahs: "",
+  memorizedMutun: "",
+  memorizedHadith: "",
+  tajweedRules: "",
 };
 
 function Index() {
@@ -111,6 +117,9 @@ function Index() {
       presentationDate: s.presentationDate || "",
       memorizedSurahs: s.memorizedSurahs.join("، "),
       expectedSurahs: s.expectedSurahs.join("، "),
+      memorizedMutun: (s.memorizedMutun || []).join("، "),
+      memorizedHadith: (s.memorizedHadith || []).join("، "),
+      tajweedRules: (s.tajweedRules || []).join("، "),
     });
     setOpen(true);
   }
@@ -139,6 +148,10 @@ function Index() {
       presentationDate: form.presentationDate || undefined,
       memorizedSurahs: parseList(form.memorizedSurahs),
       expectedSurahs: parseList(form.expectedSurahs),
+      memorizedMutun: parseList(form.memorizedMutun),
+      memorizedHadith: parseList(form.memorizedHadith),
+      tajweedRules: parseList(form.tajweedRules),
+      attendance: editing?.attendance ?? [],
     };
     if (editing) {
       update(editing.id, data);
@@ -333,6 +346,30 @@ function Index() {
                 value={form.expectedSurahs}
                 onChange={(e) => setForm({ ...form, expectedSurahs: e.target.value })}
                 placeholder="آل عمران"
+              />
+            </Field>
+            <Field label="المتون المحفوظة (تحفة الأطفال، الجزرية...)">
+              <Textarea
+                rows={2}
+                value={form.memorizedMutun}
+                onChange={(e) => setForm({ ...form, memorizedMutun: e.target.value })}
+                placeholder="تحفة الأطفال، المقدمة الجزرية"
+              />
+            </Field>
+            <Field label="الأحاديث المحفوظة (الأربعون النووية...)">
+              <Textarea
+                rows={2}
+                value={form.memorizedHadith}
+                onChange={(e) => setForm({ ...form, memorizedHadith: e.target.value })}
+                placeholder="الأربعون النووية، رياض الصالحين"
+              />
+            </Field>
+            <Field label="أحكام التلاوة المتقنة">
+              <Textarea
+                rows={2}
+                value={form.tajweedRules}
+                onChange={(e) => setForm({ ...form, tajweedRules: e.target.value })}
+                placeholder="أحكام النون الساكنة، المدود"
               />
             </Field>
             <Field label="ملاحظات">
