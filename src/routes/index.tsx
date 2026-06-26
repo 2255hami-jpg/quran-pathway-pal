@@ -117,6 +117,9 @@ function Index() {
       presentationDate: s.presentationDate || "",
       memorizedSurahs: s.memorizedSurahs.join("، "),
       expectedSurahs: s.expectedSurahs.join("، "),
+      memorizedMutun: (s.memorizedMutun || []).join("، "),
+      memorizedHadith: (s.memorizedHadith || []).join("، "),
+      tajweedRules: (s.tajweedRules || []).join("، "),
     });
     setOpen(true);
   }
