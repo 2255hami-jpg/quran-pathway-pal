@@ -1,5 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 
+export type AttendanceStatus = "present" | "absent" | "excused";
+export type AttendanceEntry = { date: string; status: AttendanceStatus; note?: string };
+
 export type Student = {
   id: string;
   fullName: string;
@@ -15,6 +18,10 @@ export type Student = {
   presentationDate?: string;
   memorizedSurahs: string[];
   expectedSurahs: string[];
+  memorizedMutun: string[];
+  memorizedHadith: string[];
+  tajweedRules: string[];
+  attendance: AttendanceEntry[];
 };
 
 const KEY = "quran_students_v1";
