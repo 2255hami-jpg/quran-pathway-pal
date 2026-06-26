@@ -148,6 +148,10 @@ function Index() {
       presentationDate: form.presentationDate || undefined,
       memorizedSurahs: parseList(form.memorizedSurahs),
       expectedSurahs: parseList(form.expectedSurahs),
+      memorizedMutun: parseList(form.memorizedMutun),
+      memorizedHadith: parseList(form.memorizedHadith),
+      tajweedRules: parseList(form.tajweedRules),
+      attendance: editing?.attendance ?? [],
     };
     if (editing) {
       update(editing.id, data);
