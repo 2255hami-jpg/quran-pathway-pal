@@ -23,7 +23,8 @@ export const Route = createFileRoute("/student/$id")({
 function StudentDetails() {
   const { id } = Route.useParams();
   const router = useRouter();
-  const { student, ready } = useStudent(id);
+  const { student, ready, setAttendance, removeAttendance } = useStudent(id);
+  const [attDate, setAttDate] = useState<string>(() => new Date().toISOString().slice(0, 10));
 
   if (!ready) return null;
   if (!student) {
