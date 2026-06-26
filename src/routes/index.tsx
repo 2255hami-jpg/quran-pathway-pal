@@ -348,6 +348,30 @@ function Index() {
                 placeholder="آل عمران"
               />
             </Field>
+            <Field label="المتون المحفوظة (تحفة الأطفال، الجزرية...)">
+              <Textarea
+                rows={2}
+                value={form.memorizedMutun}
+                onChange={(e) => setForm({ ...form, memorizedMutun: e.target.value })}
+                placeholder="تحفة الأطفال، المقدمة الجزرية"
+              />
+            </Field>
+            <Field label="الأحاديث المحفوظة (الأربعون النووية...)">
+              <Textarea
+                rows={2}
+                value={form.memorizedHadith}
+                onChange={(e) => setForm({ ...form, memorizedHadith: e.target.value })}
+                placeholder="الأربعون النووية، رياض الصالحين"
+              />
+            </Field>
+            <Field label="أحكام التلاوة المتقنة">
+              <Textarea
+                rows={2}
+                value={form.tajweedRules}
+                onChange={(e) => setForm({ ...form, tajweedRules: e.target.value })}
+                placeholder="أحكام النون الساكنة، المدود"
+              />
+            </Field>
             <Field label="ملاحظات">
               <Textarea
                 rows={2}
