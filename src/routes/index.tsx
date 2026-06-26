@@ -55,6 +55,9 @@ type FormState = {
   presentationDate: string;
   memorizedSurahs: string;
   expectedSurahs: string;
+  memorizedMutun: string;
+  memorizedHadith: string;
+  tajweedRules: string;
 };
 
 const emptyForm: FormState = {
@@ -68,6 +71,9 @@ const emptyForm: FormState = {
   presentationDate: "",
   memorizedSurahs: "",
   expectedSurahs: "",
+  memorizedMutun: "",
+  memorizedHadith: "",
+  tajweedRules: "",
 };
 
 function Index() {
