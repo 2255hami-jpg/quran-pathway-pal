@@ -420,3 +420,19 @@ function Section({
     </section>
   );
 }
+
+function ListOrDash({ items }: { items?: string[] }) {
+  if (!items || items.length === 0) {
+    return <p className="text-sm text-muted-foreground">—</p>;
+  }
+  return (
+    <ul className="space-y-1.5">
+      {items.map((s, i) => (
+        <li key={i} className="flex items-center gap-2 text-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+          {s}
+        </li>
+      ))}
+    </ul>
+  );
+}
