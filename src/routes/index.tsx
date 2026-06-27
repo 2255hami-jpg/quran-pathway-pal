@@ -334,20 +334,32 @@ function Index() {
                 />
               </Field>
             </div>
-            <Field label="السور المحفوظة (افصل بفاصلة)">
-              <Textarea
-                rows={2}
+            <Field label="السور المحفوظة">
+              <SurahPicker
+                label="السور المحفوظة"
                 value={form.memorizedSurahs}
-                onChange={(e) => setForm({ ...form, memorizedSurahs: e.target.value })}
-                placeholder="الفاتحة، البقرة"
+                onChange={(next) => {
+                  const p = pagesFromSurahs(next);
+                  setForm({
+                    ...form,
+                    memorizedSurahs: next,
+                    pages: String(p),
+                    hizb: String(hizbFromPages(p)),
+                  });
+                }}
               />
+              {form.memorizedSurahs.length > 0 && (
+                <div className="mt-1 text-xs text-muted-foreground">
+                  محسوب تلقائياً: {pagesFromSurahs(form.memorizedSurahs)} صفحة •{" "}
+                  {hizbFromPages(pagesFromSurahs(form.memorizedSurahs))} حزب
+                </div>
+              )}
             </Field>
             <Field label="السور المتوقعة">
-              <Textarea
-                rows={2}
+              <SurahPicker
+                label="السور المتوقعة"
                 value={form.expectedSurahs}
-                onChange={(e) => setForm({ ...form, expectedSurahs: e.target.value })}
-                placeholder="آل عمران"
+                onChange={(next) => setForm({ ...form, expectedSurahs: next })}
               />
             </Field>
             <Field label="المتون المحفوظة (تحفة الأطفال، الجزرية...)">
