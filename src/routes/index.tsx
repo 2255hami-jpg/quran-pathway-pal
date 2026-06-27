@@ -55,8 +55,8 @@ type FormState = {
   notes: string;
   entryDate: string;
   presentationDate: string;
-  memorizedSurahs: string;
-  expectedSurahs: string;
+  memorizedSurahs: string[];
+  expectedSurahs: string[];
   memorizedMutun: string;
   memorizedHadith: string;
   tajweedRules: string;
@@ -67,12 +67,12 @@ const emptyForm: FormState = {
   phone: "",
   email: "",
   pages: "0",
-  hizb: "1",
+  hizb: "0",
   notes: "",
   entryDate: "",
   presentationDate: "",
-  memorizedSurahs: "",
-  expectedSurahs: "",
+  memorizedSurahs: [],
+  expectedSurahs: [],
   memorizedMutun: "",
   memorizedHadith: "",
   tajweedRules: "",
