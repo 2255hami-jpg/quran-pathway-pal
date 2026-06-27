@@ -33,6 +33,8 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { Trash2, Plus, Download } from "lucide-react";
+import { SurahPicker } from "@/components/surah-picker";
+import { pagesFromSurahs, hizbFromPages } from "@/lib/quran-surahs";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -53,8 +55,8 @@ type FormState = {
   notes: string;
   entryDate: string;
   presentationDate: string;
-  memorizedSurahs: string;
-  expectedSurahs: string;
+  memorizedSurahs: string[];
+  expectedSurahs: string[];
   memorizedMutun: string;
   memorizedHadith: string;
   tajweedRules: string;
@@ -65,12 +67,12 @@ const emptyForm: FormState = {
   phone: "",
   email: "",
   pages: "0",
-  hizb: "1",
+  hizb: "0",
   notes: "",
   entryDate: "",
   presentationDate: "",
-  memorizedSurahs: "",
-  expectedSurahs: "",
+  memorizedSurahs: [],
+  expectedSurahs: [],
   memorizedMutun: "",
   memorizedHadith: "",
   tajweedRules: "",
@@ -115,8 +117,8 @@ function Index() {
       notes: s.notes,
       entryDate: s.entryDate || "",
       presentationDate: s.presentationDate || "",
-      memorizedSurahs: s.memorizedSurahs.join("، "),
-      expectedSurahs: s.expectedSurahs.join("، "),
+      memorizedSurahs: s.memorizedSurahs,
+      expectedSurahs: s.expectedSurahs,
       memorizedMutun: (s.memorizedMutun || []).join("، "),
       memorizedHadith: (s.memorizedHadith || []).join("، "),
       tajweedRules: (s.tajweedRules || []).join("، "),
@@ -146,8 +148,8 @@ function Index() {
       notes: form.notes.trim(),
       entryDate: form.entryDate || undefined,
       presentationDate: form.presentationDate || undefined,
-      memorizedSurahs: parseList(form.memorizedSurahs),
-      expectedSurahs: parseList(form.expectedSurahs),
+      memorizedSurahs: form.memorizedSurahs,
+      expectedSurahs: form.expectedSurahs,
       memorizedMutun: parseList(form.memorizedMutun),
       memorizedHadith: parseList(form.memorizedHadith),
       tajweedRules: parseList(form.tajweedRules),
@@ -332,20 +334,32 @@ function Index() {
                 />
               </Field>
             </div>
-            <Field label="السور المحفوظة (افصل بفاصلة)">
-              <Textarea
-                rows={2}
+            <Field label="السور المحفوظة">
+              <SurahPicker
+                label="السور المحفوظة"
                 value={form.memorizedSurahs}
-                onChange={(e) => setForm({ ...form, memorizedSurahs: e.target.value })}
-                placeholder="الفاتحة، البقرة"
+                onChange={(next) => {
+                  const p = pagesFromSurahs(next);
+                  setForm({
+                    ...form,
+                    memorizedSurahs: next,
+                    pages: String(p),
+                    hizb: String(hizbFromPages(p)),
+                  });
+                }}
               />
+              {form.memorizedSurahs.length > 0 && (
+                <div className="mt-1 text-xs text-muted-foreground">
+                  محسوب تلقائياً: {pagesFromSurahs(form.memorizedSurahs)} صفحة •{" "}
+                  {hizbFromPages(pagesFromSurahs(form.memorizedSurahs))} حزب
+                </div>
+              )}
             </Field>
             <Field label="السور المتوقعة">
-              <Textarea
-                rows={2}
+              <SurahPicker
+                label="السور المتوقعة"
                 value={form.expectedSurahs}
-                onChange={(e) => setForm({ ...form, expectedSurahs: e.target.value })}
-                placeholder="آل عمران"
+                onChange={(next) => setForm({ ...form, expectedSurahs: next })}
               />
             </Field>
             <Field label="المتون المحفوظة (تحفة الأطفال، الجزرية...)">
