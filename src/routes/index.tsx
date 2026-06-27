@@ -33,6 +33,8 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { Trash2, Plus, Download } from "lucide-react";
+import { SurahPicker } from "@/components/surah-picker";
+import { pagesFromSurahs, hizbFromPages } from "@/lib/quran-surahs";
 
 export const Route = createFileRoute("/")({
   head: () => ({
