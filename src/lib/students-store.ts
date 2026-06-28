@@ -91,9 +91,10 @@ export function useStudents() {
 
   const add = useCallback(
     (
-      data: Omit<Student, "id" | "createdAt" | "lastReviewAt" | "progressHistory"> & {
+      data: Omit<Student, "id" | "createdAt" | "lastReviewAt" | "progressHistory" | "selectedBadges"> & {
         lastReviewAt?: string;
         progressHistory?: ProgressPoint[];
+        selectedBadges?: string[];
       }
     ) => {
       const now = new Date().toISOString();
