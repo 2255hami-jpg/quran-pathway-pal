@@ -3,6 +3,8 @@ import { useEffect, useState, useCallback } from "react";
 export type AttendanceStatus = "present" | "absent" | "excused";
 export type AttendanceEntry = { date: string; status: AttendanceStatus; note?: string };
 
+export type ProgressPoint = { month: string; pages: number };
+
 export type Student = {
   id: string;
   fullName: string;
@@ -22,7 +24,21 @@ export type Student = {
   memorizedHadith: string[];
   tajweedRules: string[];
   attendance: AttendanceEntry[];
+  progressHistory: ProgressPoint[];
 };
+
+function currentMonth() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function upsertProgress(history: ProgressPoint[] | undefined, pages: number): ProgressPoint[] {
+  const m = currentMonth();
+  const list = (history || []).filter((p) => p.month !== m);
+  list.push({ month: m, pages });
+  list.sort((a, b) => (a.month < b.month ? -1 : 1));
+  return list;
+}
 
 const KEY = "quran_students_v1";
 
@@ -40,6 +56,7 @@ function load(): Student[] {
       memorizedHadith: s.memorizedHadith ?? [],
       tajweedRules: s.tajweedRules ?? [],
       attendance: s.attendance ?? [],
+      progressHistory: s.progressHistory ?? [],
     }));
   } catch {
     return [];
@@ -71,22 +88,28 @@ export function useStudents() {
   }, []);
 
   const add = useCallback(
-    (data: Omit<Student, "id" | "createdAt" | "lastReviewAt"> & { lastReviewAt?: string }) => {
+    (
+      data: Omit<Student, "id" | "createdAt" | "lastReviewAt" | "progressHistory"> & {
+        lastReviewAt?: string;
+        progressHistory?: ProgressPoint[];
+      }
+    ) => {
       const now = new Date().toISOString();
-    const s: Student = {
-      ...data,
-      memorizedSurahs: data.memorizedSurahs ?? [],
-      expectedSurahs: data.expectedSurahs ?? [],
-      memorizedMutun: data.memorizedMutun ?? [],
-      memorizedHadith: data.memorizedHadith ?? [],
-      tajweedRules: data.tajweedRules ?? [],
-      attendance: data.attendance ?? [],
-      entryDate: data.entryDate || now,
-      presentationDate: data.presentationDate || "",
-      id: crypto.randomUUID(),
-      createdAt: now,
-      lastReviewAt: data.lastReviewAt || now,
-    };
+      const s: Student = {
+        ...data,
+        memorizedSurahs: data.memorizedSurahs ?? [],
+        expectedSurahs: data.expectedSurahs ?? [],
+        memorizedMutun: data.memorizedMutun ?? [],
+        memorizedHadith: data.memorizedHadith ?? [],
+        tajweedRules: data.tajweedRules ?? [],
+        attendance: data.attendance ?? [],
+        progressHistory: upsertProgress(data.progressHistory, data.pages),
+        entryDate: data.entryDate || now,
+        presentationDate: data.presentationDate || "",
+        id: crypto.randomUUID(),
+        createdAt: now,
+        lastReviewAt: data.lastReviewAt || now,
+      };
       persist([s, ...load()]);
       return s;
     },
@@ -95,7 +118,14 @@ export function useStudents() {
 
   const update = useCallback(
     (id: string, patch: Partial<Student>) => {
-      const next = load().map((s) => (s.id === id ? { ...s, ...patch } : s));
+      const next = load().map((s) => {
+        if (s.id !== id) return s;
+        const merged = { ...s, ...patch };
+        if (patch.pages !== undefined && patch.pages !== s.pages) {
+          merged.progressHistory = upsertProgress(s.progressHistory, patch.pages);
+        }
+        return merged;
+      });
       persist(next);
     },
     [persist]
