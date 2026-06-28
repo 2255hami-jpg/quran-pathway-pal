@@ -3,6 +3,8 @@ import { useEffect, useState, useCallback } from "react";
 export type AttendanceStatus = "present" | "absent" | "excused";
 export type AttendanceEntry = { date: string; status: AttendanceStatus; note?: string };
 
+export type ProgressPoint = { month: string; pages: number };
+
 export type Student = {
   id: string;
   fullName: string;
@@ -22,7 +24,21 @@ export type Student = {
   memorizedHadith: string[];
   tajweedRules: string[];
   attendance: AttendanceEntry[];
+  progressHistory: ProgressPoint[];
 };
+
+function currentMonth() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function upsertProgress(history: ProgressPoint[] | undefined, pages: number): ProgressPoint[] {
+  const m = currentMonth();
+  const list = (history || []).filter((p) => p.month !== m);
+  list.push({ month: m, pages });
+  list.sort((a, b) => (a.month < b.month ? -1 : 1));
+  return list;
+}
 
 const KEY = "quran_students_v1";
 
