@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, FileText, Pin, Check, X, Clock, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { computeBadges } from "@/lib/badges";
+import { ProgressChart } from "@/components/progress-chart";
 
 export const Route = createFileRoute("/student/$id")({
   head: ({ params }) => ({
@@ -329,6 +331,57 @@ function StudentDetails() {
         <MiniStat icon="📖" value={student.pages} label="الصفحات" />
         <MiniStat icon="📕" value={student.hizb} label="الأحزاب" />
       </div>
+
+      {/* Badges */}
+      <section
+        className="mx-4 mt-4 rounded-2xl p-4"
+        style={{ background: "var(--brand-stats)", boxShadow: "var(--shadow-card)" }}
+      >
+        <h4 className="mb-3 text-base font-bold text-foreground">🏅 الأوسمة والإنجازات</h4>
+        {(() => {
+          const badges = computeBadges(student);
+          const earned = badges.filter((b) => b.earned);
+          return (
+            <>
+              <div className="mb-3 text-xs text-muted-foreground">
+                {earned.length} من {badges.length} وسام
+              </div>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {badges.map((b) => (
+                  <div
+                    key={b.id}
+                    className={`relative overflow-hidden rounded-xl p-3 text-center transition ${
+                      b.earned ? "text-white" : "bg-card text-muted-foreground opacity-60"
+                    }`}
+                    style={b.earned ? { background: b.color, boxShadow: "var(--shadow-card)" } : undefined}
+                    title={b.description}
+                  >
+                    <div className="text-2xl">{b.emoji}</div>
+                    <div className="mt-1 text-[11px] font-bold leading-tight">{b.title}</div>
+                    <div className="mt-0.5 text-[9px] opacity-80 leading-tight">{b.description}</div>
+                    {!b.earned && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 text-lg">
+                        🔒
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </>
+          );
+        })()}
+      </section>
+
+      {/* Progress chart */}
+      <section
+        className="mx-4 mt-4 rounded-2xl p-4"
+        style={{ background: "var(--brand-stats)", boxShadow: "var(--shadow-card)" }}
+      >
+        <h4 className="mb-3 text-base font-bold text-foreground">📈 تطور الحفظ خلال الأشهر</h4>
+        <ProgressChart data={student.progressHistory || []} />
+      </section>
+
+
 
       {/* Memorized */}
       <Section title="✅ السور المحفوظة" tone="green">
