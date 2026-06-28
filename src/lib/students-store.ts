@@ -88,22 +88,28 @@ export function useStudents() {
   }, []);
 
   const add = useCallback(
-    (data: Omit<Student, "id" | "createdAt" | "lastReviewAt"> & { lastReviewAt?: string }) => {
+    (
+      data: Omit<Student, "id" | "createdAt" | "lastReviewAt" | "progressHistory"> & {
+        lastReviewAt?: string;
+        progressHistory?: ProgressPoint[];
+      }
+    ) => {
       const now = new Date().toISOString();
-    const s: Student = {
-      ...data,
-      memorizedSurahs: data.memorizedSurahs ?? [],
-      expectedSurahs: data.expectedSurahs ?? [],
-      memorizedMutun: data.memorizedMutun ?? [],
-      memorizedHadith: data.memorizedHadith ?? [],
-      tajweedRules: data.tajweedRules ?? [],
-      attendance: data.attendance ?? [],
-      entryDate: data.entryDate || now,
-      presentationDate: data.presentationDate || "",
-      id: crypto.randomUUID(),
-      createdAt: now,
-      lastReviewAt: data.lastReviewAt || now,
-    };
+      const s: Student = {
+        ...data,
+        memorizedSurahs: data.memorizedSurahs ?? [],
+        expectedSurahs: data.expectedSurahs ?? [],
+        memorizedMutun: data.memorizedMutun ?? [],
+        memorizedHadith: data.memorizedHadith ?? [],
+        tajweedRules: data.tajweedRules ?? [],
+        attendance: data.attendance ?? [],
+        progressHistory: upsertProgress(data.progressHistory, data.pages),
+        entryDate: data.entryDate || now,
+        presentationDate: data.presentationDate || "",
+        id: crypto.randomUUID(),
+        createdAt: now,
+        lastReviewAt: data.lastReviewAt || now,
+      };
       persist([s, ...load()]);
       return s;
     },
@@ -112,7 +118,14 @@ export function useStudents() {
 
   const update = useCallback(
     (id: string, patch: Partial<Student>) => {
-      const next = load().map((s) => (s.id === id ? { ...s, ...patch } : s));
+      const next = load().map((s) => {
+        if (s.id !== id) return s;
+        const merged = { ...s, ...patch };
+        if (patch.pages !== undefined && patch.pages !== s.pages) {
+          merged.progressHistory = upsertProgress(s.progressHistory, patch.pages);
+        }
+        return merged;
+      });
       persist(next);
     },
     [persist]
