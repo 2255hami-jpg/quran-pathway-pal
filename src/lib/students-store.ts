@@ -25,6 +25,7 @@ export type Student = {
   tajweedRules: string[];
   attendance: AttendanceEntry[];
   progressHistory: ProgressPoint[];
+  selectedBadges: string[];
 };
 
 function currentMonth() {
@@ -57,6 +58,7 @@ function load(): Student[] {
       tajweedRules: s.tajweedRules ?? [],
       attendance: s.attendance ?? [],
       progressHistory: s.progressHistory ?? [],
+      selectedBadges: s.selectedBadges ?? [],
     }));
   } catch {
     return [];
@@ -89,9 +91,10 @@ export function useStudents() {
 
   const add = useCallback(
     (
-      data: Omit<Student, "id" | "createdAt" | "lastReviewAt" | "progressHistory"> & {
+      data: Omit<Student, "id" | "createdAt" | "lastReviewAt" | "progressHistory" | "selectedBadges"> & {
         lastReviewAt?: string;
         progressHistory?: ProgressPoint[];
+        selectedBadges?: string[];
       }
     ) => {
       const now = new Date().toISOString();
@@ -104,6 +107,7 @@ export function useStudents() {
         tajweedRules: data.tajweedRules ?? [],
         attendance: data.attendance ?? [],
         progressHistory: upsertProgress(data.progressHistory, data.pages),
+        selectedBadges: data.selectedBadges ?? [],
         entryDate: data.entryDate || now,
         presentationDate: data.presentationDate || "",
         id: crypto.randomUUID(),
@@ -190,7 +194,24 @@ export function useStudent(id: string) {
     [id, refresh]
   );
 
-  return { student, ready, refresh, setAttendance, removeAttendance };
+  const toggleBadge = useCallback(
+    (badgeId: string) => {
+      const list = load();
+      const next = list.map((s) => {
+        if (s.id !== id) return s;
+        const cur = s.selectedBadges || [];
+        const sel = cur.includes(badgeId)
+          ? cur.filter((b) => b !== badgeId)
+          : [...cur, badgeId];
+        return { ...s, selectedBadges: sel };
+      });
+      save(next);
+      refresh();
+    },
+    [id, refresh]
+  );
+
+  return { student, ready, refresh, setAttendance, removeAttendance, toggleBadge };
 }
 
 export function formatDate(iso: string) {
