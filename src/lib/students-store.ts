@@ -56,6 +56,7 @@ function load(): Student[] {
       memorizedHadith: s.memorizedHadith ?? [],
       tajweedRules: s.tajweedRules ?? [],
       attendance: s.attendance ?? [],
+      progressHistory: s.progressHistory ?? [],
     }));
   } catch {
     return [];
