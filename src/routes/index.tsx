@@ -249,6 +249,9 @@ function Index() {
             />
           ))
         )}
+        <footer className="mt-10 pb-24 text-center text-xs text-muted-foreground">
+          <div>تطوير: حميس محمود أمين</div>
+        </footer>
       </main>
 
       {/* FAB */}
