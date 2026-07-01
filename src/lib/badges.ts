@@ -18,7 +18,7 @@ export const BADGES: BadgeDef[] = [
     id: "half-quran",
     emoji: "📖",
     title: "نصف القرآن",
-    description: "حفظ 15 حزباً أو أكثر",
+    description: "حفظ 30 حزباً أو أكثر",
     color: "linear-gradient(135deg,#1B5E20,#2E7D32)",
   },
   {
